@@ -15,6 +15,7 @@ TalkToTheHand is a computer vision system designed to recognize American Sign La
 
 - Real-time hand gesture detection using webcam input
 - Hand keypoint extraction using [MediaPipe](https://mediapipe.dev/)
+- https://research.google/blog/on-device-real-time-hand-tracking-with-mediapipe/ 
 - ASL sign classification with TensorFlow Lite models
 - On-screen output translation of recognized signs
 - Data collection script for capturing training data
