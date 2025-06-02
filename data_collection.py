@@ -8,7 +8,7 @@ mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
 
 DATA_PATH = 'data/'
-LABEL = 'A'  # Change per session
+LABEL = 'Z'  # Change per session
 os.makedirs(DATA_PATH, exist_ok=True)
 
 cap = cv2.VideoCapture(0)
