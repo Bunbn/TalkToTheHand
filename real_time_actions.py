@@ -5,7 +5,7 @@ from tensorflow.keras.models import load_model
 from utils import extract_keypoints
 
 model = load_model('model/asl_model.h5')
-label_map = {0: 'A', 1: 'B', 2: 'C'}
+label_map = {0: 'A', 1: 'B', 2: 'C', 3: 'D'}
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils

@@ -8,7 +8,7 @@ from tensorflow.keras.utils import to_categorical
 DATA_PATH = 'data/'
 X, y = [], []
 
-label_map = {'A': 0, 'B': 1, 'C' : 2}  # Expand this
+label_map = {'A': 0}#, 'B': 1, 'C' : 2, 'D': 3}  # Expand this
 
 for file in os.listdir(DATA_PATH):
     key = file.split('_')[0]
