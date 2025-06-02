@@ -25,6 +25,13 @@ TalkToTheHand is a computer vision system designed to recognize American Sign La
 ## Requirements
 - Run requirements.txt
 - See `requirements.txt` for full Python dependencies
+  
+---
+
+## Improvements
+- Accuracy/certainty percentage on screen
+- If multiple hands, letters moving to each specific hand
+- Change model training method and check accuracy for each letter by putting in photos 
 
 ---
 
