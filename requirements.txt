@@ -1,2 +1,2 @@
 # run this in terminal
-pip install opencv-python mediapipe tensorflow
+pip3 install opencv-python mediapipe tensorflow
