@@ -28,13 +28,17 @@ y_cat = to_categorical(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size=0.2)
 
 model = Sequential([
-    Dense(128, activation='relu', input_shape=(63,)),
+    Dense(256, activation='relu', input_shape=(63,)), # increased from 128 to 256
+    Dropout(0.4), # increased from 0.3 to 0.4; reduce overfitting
+    Dense(128, activation='relu'), # additional dense layer
     Dropout(0.3),
-    Dense(64, activation='relu'),
+    Dense(64, activation='relu'), 
     Dense(len(label_map), activation='softmax')
 ])
 
 model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['accuracy'])
-model.fit(X_train, y_train, epochs=30, validation_data=(X_test, y_test))
+model.fit(X_train, y_train, 
+          epochs=100, # changed epochs from 30 to 100; monitor for overfitting
+          validation_data=(X_test, y_test)) 
 
 model.save('model/asl_model.h5')
