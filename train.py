@@ -25,7 +25,8 @@ X = np.array(X)
 y = np.array(y)
 y_cat = to_categorical(y)
 
-X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size=0.2)
+# Added stratify
+X_train, X_test, y_train, y_test = train_test_split(X, y_cat, test_size=0.2, stratify=y_cat)
 
 model = Sequential([
     Dense(256, activation='relu', input_shape=(63,)), # increased from 128 to 256
