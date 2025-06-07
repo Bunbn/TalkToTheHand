@@ -32,7 +32,12 @@ with mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7) as hands:
                 keypoints = extract_keypoints(hand_landmarks)
                 prediction = model.predict(np.expand_dims(keypoints, axis=0))[0]
                 class_id = np.argmax(prediction)
-                label = label_map[class_id]
+                # Add confidence
+                confidence = prediction[class_id]  # Get certainty of top prediction
+                if confidence > 0.6:
+                    label = f"{label_map[class_id]} ({confidence * 100:.1f}%)"
+                else:
+                    label = "Uncertain"
                 mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 cv2.putText(image, label, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
                             1, (255, 0, 0), 2, cv2.LINE_AA)
