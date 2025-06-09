@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import mediapipe as mp
+import time
 from tensorflow.keras.models import load_model
 from utils import extract_keypoints
 from collections import deque, Counter
@@ -15,6 +16,11 @@ label_map = {
 
 # Initialize a history buffer
 prediction_history = deque(maxlen=10)
+
+word_buffer = ""
+last_letter = None
+last_added_time = 0
+letter_delay = 1.0 # Seconds
 
 mp_hands = mp.solutions.hands
 mp_drawing = mp.solutions.drawing_utils
@@ -50,17 +56,46 @@ with mp_hands.Hands(max_num_hands=1, min_detection_confidence=0.7) as hands:
 
                 # Display only if majority consensus
                 if count > 5:
-                    label = f"{label_map[most_common_id]} ({prediction[most_common_id] * 100:.1f}%)"
+                    predicted_letter = label_map[most_common_id]
+                    confidence = prediction[most_common_id]
+
+                    if confidence > 0.9:
+                        label = f"{predicted_letter} ({confidence * 100:.1f}%)"
+
+                        # Add to word buffer if it's a new letter
+                        # Delay between letters
+                        current_time = time.time()
+                        if last_letter != predicted_letter or (current_time - last_added_time) > letter_delay:
+                            word_buffer += predicted_letter
+                            last_letter = predicted_letter
+                            last_added_time = current_time
+
+                    else:
+                        label = "Uncertain"
+                        last_letter = None  # Reset to allow re-entry later
                 else:
                     label = "..."
+                    last_letter = None  # Reset on instability
+
 
                 mp_drawing.draw_landmarks(image, hand_landmarks, mp_hands.HAND_CONNECTIONS)
                 cv2.putText(image, label, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
                             1, (255, 0, 0), 2, cv2.LINE_AA)
+                cv2.putText(image, f"Word: {word_buffer}", (10, 100), cv2.FONT_HERSHEY_SIMPLEX,
+                            1.0, (0, 255, 0), 2, cv2.LINE_AA)
 
         cv2.imshow('ASL Recognition', image)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+
+        key = cv2.waitKey(1) & 0xFF
+        if key == ord('q'): # Quit program
             break
+        elif key == ord('d'): # Reset word
+            word_buffer = ""
+            last_letter = None
+        elif key == ord('b'): # Remove last letter in word
+            word_buffer = word_buffer[:-1]  
+
+
 
 
 cap.release()
